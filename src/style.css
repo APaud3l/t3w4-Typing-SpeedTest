@@ -33,6 +33,8 @@ body {
     background-color: aquamarine;
     border: none;
     cursor: pointer;
+    /* align-items: center; */
+    text-align: center;
 }
 
 .play-button:hover {

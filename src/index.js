@@ -12,6 +12,7 @@ const sentenceDisplay = document.getElementById("sentenceDisplay");
 const inputField = document.getElementById("inputField");
 const resultsSection = document.getElementById("resultsSection");
 const timerDisplay = document.getElementById("timerDisplay");
+const restartButton = document.getElementById("restartButton");
 
 
 // Sentence fetching
@@ -38,6 +39,7 @@ async function displaySentence() {
 // Event Listeners
 playButton.addEventListener('click', startGame);
 inputField.addEventListener('input', trackTyping);
+restartButton.addEventListener('click', restartGame);
 
 // Start the game
 function startGame() {
@@ -53,18 +55,21 @@ function startGame() {
     inputField.style.display = 'block';
     sentenceDisplay.style.display = 'block';
     timerDisplay.style.display = 'block';
+    playButton.style.display = 'none';
+    restartButton.style.display = 'block';
+    restartButton.style.margin = 'auto';
 }
 
 function startTimer() {
     timerInterval = setInterval(() => {
         if (timer > 0) {
             timer--;
-            timerDisplay.textContent = `Time Left: ${timer}s`;
+            timerDisplay.innerText += `Time Left: ${timer}s`;
         }
         else {
             endGame();
         }
-    }, 1000);
+    }, 1000); // 1000ms = 1 second
 }
 
 // Typing and tracking functions
@@ -125,6 +130,27 @@ function calculateWPM(){
     return wpm;
 }
 
+// Restart Game Functionality 
+function restartGame(){
+    // Reset game variables and UI elements
+    correctCharacters = 0;
+    totalCharacters = 0;
+    startTime = null;
+    // Reset Timer
+    timer = 10; 
+    clearInterval(timerInterval);
+
+    // Reset and enable input fields
+    inputField.value = '';
+    inputField.style.display = 'block';
+
+    // Display the new sentence and reset other UI elements
+    displaySentence();
+    resultsSection.innerHTML = '';
+    timerDisplay.textContent = `Time Left: ${timer}s`;
+    playButton.style.display = 'none';
+}
+
 function endGame(){
     // Stop the timer
     clearInterval(timerInterval);
@@ -134,7 +160,7 @@ function endGame(){
     
     // Calculate the final accuracy
     const accuracy = Math.floor((correctCharacters / totalCharacters) * 100);
-    
+
     // Display the result in the resultDiv
     resultsSection.innerHTML = `<p>Game Over! Your Final WPM: ${wpm} | Accuracy: ${accuracy}%</p>`;
 }
